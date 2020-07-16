@@ -10,6 +10,13 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    //MARK:- IBOutlet
+    
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    
+    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -21,14 +28,16 @@ class LoginViewController: UIViewController {
     //MARK:- Allow the user to login
     
     @IBAction func loginButton(_ sender: Any) {
-        
-        if true {
-             self.performSegue(withIdentifier: "showMap", sender: nil)
-        }
-       
+        APIClient.login(username: self.emailTextField.text ?? "No" , password: self.passwordTextField.text ?? "no", completion: self.handlerLoginResonse(success:error:))
     }
-    
-    
-    
+            
+    func handlerLoginResonse(success:Bool,error:Error?) -> Void{
+        print(success)
+        if success {
+            DispatchQueue.main.sync {
+                self.performSegue(withIdentifier: "showMap", sender: nil)
+            }
+        }
+    }
 }
 
