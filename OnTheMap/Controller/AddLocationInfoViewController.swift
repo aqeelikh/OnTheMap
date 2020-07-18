@@ -36,20 +36,25 @@ class AddLocationInfoViewController: UIViewController {
     
     
     func getCoordinate( addressString : String,
-            completionHandler: @escaping(CLLocationCoordinate2D, NSError?) -> Void ) {
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(addressString) { (placemarks, error) in
-            if error == nil {
-                if let placemark = placemarks?[0] {
-                    let location = placemark.location!
-                        
-                    completionHandler(location.coordinate, nil)
-                    return
+        completionHandler: @escaping(CLLocationCoordinate2D, NSError?) -> Void ) {
+        let spinner = self.startAnActivityIndicator()
+        spinner.startAnimating()
+        DispatchQueue.main.async {
+            let geocoder = CLGeocoder()
+            geocoder.geocodeAddressString(addressString) { (placemarks, error) in
+                if error == nil {
+                    if let placemark = placemarks?[0] {
+                        let location = placemark.location!
+                            
+                        completionHandler(location.coordinate, nil)
+                        return
+                    }
+                }else {
+                    spinner.stopAnimating()
+                    self.showAlert(message: "Error, enter a valid address")
                 }
-            }else {
-                self.showAlert(message: "Error, enter a valid address")
+                completionHandler(kCLLocationCoordinate2DInvalid, error as NSError?)
             }
-            completionHandler(kCLLocationCoordinate2DInvalid, error as NSError?)
         }
     }
     
@@ -84,13 +89,7 @@ class AddLocationInfoViewController: UIViewController {
         
         passStudentInformation(location: location!)
     }
-    
-    func showAlert(message:String){
-            let alertController = UIAlertController(title: "On The Map", message: message, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
-            self.present(alertController, animated: true, completion: nil)
-    }
-        
+            
     @IBAction func cancelButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }

@@ -16,14 +16,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-        
     @IBAction func signUpButton(_ sender: Any) {
         
         let app = UIApplication.shared
@@ -35,37 +27,19 @@ class LoginViewController: UIViewController {
 
     //MARK:- Allow the user to login
     @IBAction func loginButton(_ sender: Any) {
-        APIClient.login(username: self.emailTextField.text ?? "No" , password: self.passwordTextField.text ?? "no", completion: self.handlerLoginResonse(success:error:statuscode:))
+        APIClient.login(username: self.emailTextField.text ?? "No" , password: self.passwordTextField.text ?? "no", completion: self.handlerLoginResonse(success:error:))
     }
             
     
-    func handlerLoginResonse(success:Bool,error:Error?,statuscode:Int) -> Void{
+    func handlerLoginResonse(success:Bool,error:String) -> Void{
         
-        switch statuscode {
-        case 200:
+        if success {
             DispatchQueue.main.sync {
                 self.performSegue(withIdentifier: "showMap", sender: nil)
             }
-        case 400 :
-            showAlert(message: "Wrong credentials. try again")
-        case 401 :
-            showAlert(message: "Unauthenticated Access")
-        case 404:
-            showAlert(message: "Not Found")
-        case 500:
-            showAlert(message: "Internal Server Error")
-        default:
-            showAlert(message: "Error, email or password is invalid ")
+        }else{
+                self.showAlert(message: error)
         }
     }
-    
-    //MARK:- Notify the user if the login fails
-    func showAlert(message:String){
-        DispatchQueue.main.sync {
-        let alertController = UIAlertController(title: "On The Map", message: message, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
-        self.present(alertController, animated: true, completion: nil)
-            }
-        }
 }
 

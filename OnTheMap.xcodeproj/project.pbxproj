@@ -25,6 +25,7 @@
 		C5B6C8BE24BE59A900990608 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B6C8BD24BE59A900990608 /* StudentLocation.swift */; };
 		C5B8894B24C0DB7D00D03035 /* AddLocationInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B8894A24C0DB7D00D03035 /* AddLocationInfoViewController.swift */; };
 		C5B8894D24C0F30600D03035 /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B8894C24C0F30600D03035 /* LoginResponse.swift */; };
+		C5C00F8924C2F238006EC615 /* UIResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C00F8824C2F238006EC615 /* UIResponseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		C5B6C8BD24BE59A900990608 /* StudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
 		C5B8894A24C0DB7D00D03035 /* AddLocationInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationInfoViewController.swift; sourceTree = "<group>"; };
 		C5B8894C24C0F30600D03035 /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		C5C00F8824C2F238006EC615 /* UIResponseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				C5B6C8BA24BE54EC00990608 /* LocationsTableViewController.swift */,
 				C51AFE7324C0C18700578961 /* PostLocationViewController.swift */,
 				C5B8894A24C0DB7D00D03035 /* AddLocationInfoViewController.swift */,
+				C5C00F8824C2F238006EC615 /* UIResponseViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 				C51AFE7424C0C18700578961 /* PostLocationViewController.swift in Sources */,
 				C5609B4A24BF7DE00064BCD4 /* APIClient.swift in Sources */,
 				C507876024BE383100BB3120 /* AppDelegate.swift in Sources */,
+				C5C00F8924C2F238006EC615 /* UIResponseViewController.swift in Sources */,
 				C5609B4E24BF90420064BCD4 /* Session.swift in Sources */,
 				C5609B5024BF90750064BCD4 /* Account.swift in Sources */,
 				C5B6C8BE24BE59A900990608 /* StudentLocation.swift in Sources */,

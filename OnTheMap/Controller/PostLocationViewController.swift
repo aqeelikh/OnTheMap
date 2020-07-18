@@ -16,7 +16,12 @@ class PostLocationViewController: UIViewController, MKMapViewDelegate{
 
     var location: Result!
     
-   
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let spinner = self.startAnActivityIndicator()
+        spinner.stopAnimating()
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMap()
@@ -68,10 +73,13 @@ class PostLocationViewController: UIViewController, MKMapViewDelegate{
      }
         
     @IBAction func postLocationButton(_ sender: Any) {
-        
         APIClient.PostLocation(reslut: location) { result, error in
         DispatchQueue.main.async {
-             self.dismiss(animated: true, completion: nil)
+            if error == nil{
+                self.dismiss(animated: true, completion: nil)
+                }else{
+                    self.showAlert(message: error!.localizedDescription)
+                }
             }
         }
     }
@@ -95,14 +103,4 @@ class PostLocationViewController: UIViewController, MKMapViewDelegate{
 //            showAlert(message: "Cannot post information, try again later")
 //        }
 //    }
-//
-//    //MARK:- Notify the user if the login fails
-//    func showAlert(message:String){
-//        DispatchQueue.main.sync {
-//        let alertController = UIAlertController(title: "On The Map", message: message, preferredStyle: .alert)
-//            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
-//        self.present(alertController, animated: true, completion: nil)
-//            }
-//        }
-
 }
