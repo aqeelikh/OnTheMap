@@ -11,3 +11,7 @@ struct LoginResponse: Codable {
     let account: Account
     let session: Session
 }
+
+struct PostResonse: Codable {
+    let updatedAt: String
+}

@@ -10,11 +10,11 @@ import Foundation
 
 
 class APIClient {
-    
-    static let user = User()
+
     
     enum APIInformation {
         static var sessionId:String = ""
+        static var accountKey:String = ""
     }
     
     
@@ -43,7 +43,7 @@ class APIClient {
         }
     }
     
-    class func login(username:String,password:String,completion: @escaping (_ succuss:Bool, String) -> Void) {
+    class func login(username:String,password:String,completion: @escaping (_ succuss:Bool, Error?) -> Void) {
        
         
        var request = URLRequest(url: Endpoint.login.url)
@@ -52,39 +52,62 @@ class APIClient {
                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                // encoding a JSON body from a string, can also use a Codable struct
                request.httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: .utf8)
-               var errString: String?
-               let session = URLSession.shared
-               let task = session.dataTask(with: request) { data, response, error in
-                   if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                       if statusCode < 400 {
-                           guard let data = data else{
-                                errString = "cant get data"
-                               return
-                           }
-                           do {
-                               completion(true, "")
-                               let decoder = JSONDecoder()
-                               //Whats happening here ?! :|
-                               let range = 5..<data.count
-                               let newData = data.subdata(in: range)
-                               let resObject = try decoder.decode(LoginResponse.self, from: newData)
-                               APIInformation.sessionId = resObject.session.id
-                           }catch{
-                               print(error)
-                               errString = "can't parse response"
-                           }
-                       }else{
-                        errString = "Did not specify exactly one credential"
-                        }
-                   }else{
-                    errString = "Check Network Connection"
+        
+        let task = URLSession.shared.dataTask(with: request){(data, res, error) in
+            guard let data = data else{
+                completion(false,error)
+                return
             }
-                guard let err = errString else { return }
-                DispatchQueue.main.async {
-                        completion(false,err)
-                }
+            do {
+                let decoder = JSONDecoder()
+               let range = 5..<data.count
+               let newData = data.subdata(in: range)
+               let resObject = try decoder.decode(LoginResponse.self, from: newData)
+                APIInformation.sessionId = resObject.session.id
+                APIInformation.accountKey = resObject.account.key
+                completion(true, error)
+            }catch{
+                print(error)
+                completion(false,error)
+            }
         }
-               task.resume()
+        task.resume()
+        
+        
+        
+//               var errString: String?
+//               let session = URLSession.shared
+//               let task = session.dataTask(with: request) { data, response, error in
+//                   if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+//                       if statusCode < 400 {
+//                           guard let data = data else{
+//                                errString = "cant get data"
+//                               return
+//                           }
+//                           do {
+//                               completion(true, "")
+//                               let decoder = JSONDecoder()
+//                               //Whats happening here ?! :|
+//                               let range = 5..<data.count
+//                               let newData = data.subdata(in: range)
+//                               let resObject = try decoder.decode(LoginResponse.self, from: newData)
+//                               APIInformation.sessionId = resObject.session.id
+//                           }catch{
+//                               print(error)
+//                               errString = "can't parse response"
+//                           }
+//                       }else{
+//                        errString = "Did not specify exactly one credential"
+//                        }
+//                   }else{
+//                    errString = "Check Network Connection"
+//            }
+//                guard let err = errString else { return }
+//                DispatchQueue.main.async {
+//                        completion(false,err)
+//                }
+//        }
+//               task.resume()
     }
     
     class func deleteSession(completion: @escaping (Bool, Error?) -> Void) {
@@ -111,24 +134,32 @@ class APIClient {
         task.resume()
     }
     
-    class func PostLocation(reslut:Result,completion: @escaping ([Result], Error?) -> Void) {
+    class func PostLocation(reslut:Result,completion: @escaping (Bool, Error?) -> Void) {
         
         var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"\(reslut.uniqueKey)\", \"firstName\": \"\(reslut.firstName)\", \"lastName\": \"\(reslut.lastName)\",\"mapString\": \"\(reslut.mapString)\", \"mediaURL\": \"\(reslut.mediaURL)\",\"latitude\": \(reslut.latitude), \"longitude\": \(reslut.longitude)}".data(using: .utf8)
-
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-          if error != nil { // Handle error…
-              return
-          }
-          completion([], nil)
+       
+        let task = URLSession.shared.dataTask(with: request){(data, res, error) in
+            guard let data = data else{
+                    completion(false,error)
+                return
+            }
+        do {
+                let decoder = JSONDecoder()
+                let range = 5..<data.count
+                let newData = data.subdata(in: range)
+                completion(true, error)
+            }catch{
+                print(error)
+                completion(false,error)
+              }
         }
-        task.resume()
-    }
-    
-    
+             task.resume()
+
+}
+
     class func getStudentLocationData(completion: @escaping ([Result], Error?) -> Void) {
         
         let request = URLRequest(url: Endpoint.getStudentLocation.url)

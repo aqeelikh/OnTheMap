@@ -31,14 +31,17 @@ class LoginViewController: UIViewController {
     }
             
     
-    func handlerLoginResonse(success:Bool,error:String) -> Void{
+    func handlerLoginResonse(success:Bool,error:Error?) -> Void{
         
         if success {
             DispatchQueue.main.sync {
                 self.performSegue(withIdentifier: "showMap", sender: nil)
+                return
             }
         }else{
-                self.showAlert(message: error)
+            DispatchQueue.main.sync {
+            self.showAlert(message: error!.localizedDescription)
+            }
         }
     }
 }

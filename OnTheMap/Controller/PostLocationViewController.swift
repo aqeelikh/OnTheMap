@@ -73,34 +73,19 @@ class PostLocationViewController: UIViewController, MKMapViewDelegate{
      }
         
     @IBAction func postLocationButton(_ sender: Any) {
-        APIClient.PostLocation(reslut: location) { result, error in
-        DispatchQueue.main.async {
-            if error == nil{
+        APIClient.PostLocation(reslut: location, completion: self.handlerPostLocationResonse(success:error:))
+    }
+    
+    func handlerPostLocationResonse(success:Bool,error:Error?) -> Void{
+        
+        if success {
+            DispatchQueue.main.sync {
                 self.dismiss(animated: true, completion: nil)
-                }else{
-                    self.showAlert(message: error!.localizedDescription)
-                }
+            }
+        }else{
+             DispatchQueue.main.sync {
+            self.showAlert(message: error!.localizedDescription)
             }
         }
     }
-    
-//    func handlerPostLocationResonse(success:Bool,error:Error?,statuscode:Int) -> Void{
-//
-//        switch statuscode {
-//        case 200:
-//            DispatchQueue.main.sync {
-//                self.performSegue(withIdentifier: "showMap", sender: nil)
-//            }
-//        case 400 :
-//            showAlert(message: "Wrong credentials. try again")
-//        case 401 :
-//            showAlert(message: "Unauthenticated Access")
-//        case 404:
-//            showAlert(message: "Not Found")
-//        case 500:
-//            showAlert(message: "Internal Server Error")
-//        default:
-//            showAlert(message: "Cannot post information, try again later")
-//        }
-//    }
 }
