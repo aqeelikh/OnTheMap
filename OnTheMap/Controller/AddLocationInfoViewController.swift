@@ -46,6 +46,8 @@ class AddLocationInfoViewController: UIViewController {
                     completionHandler(location.coordinate, nil)
                     return
                 }
+            }else {
+                self.showAlert(message: "Error, enter a valid address")
             }
             completionHandler(kCLLocationCoordinate2DInvalid, error as NSError?)
         }

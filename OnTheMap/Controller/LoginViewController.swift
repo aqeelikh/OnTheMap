@@ -55,7 +55,7 @@ class LoginViewController: UIViewController {
         case 500:
             showAlert(message: "Internal Server Error")
         default:
-            showAlert(message: "Error, Try Again later")
+            showAlert(message: "Error, email or password is invalid ")
         }
     }
     
