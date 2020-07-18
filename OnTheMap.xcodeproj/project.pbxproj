@@ -91,6 +91,7 @@
 		C507877324BE384000BB3120 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C507876124BE383100BB3120 /* SceneDelegate.swift */,
 				C507876524BE383100BB3120 /* Main.storyboard */,
 				C507876824BE383100BB3120 /* Assets.xcassets */,
 				C507876A24BE383100BB3120 /* LaunchScreen.storyboard */,
@@ -102,7 +103,6 @@
 			isa = PBXGroup;
 			children = (
 				C507875F24BE383100BB3120 /* AppDelegate.swift */,
-				C507876124BE383100BB3120 /* SceneDelegate.swift */,
 				C51AFE7124C087CF00578961 /* MapViewController.swift */,
 				C507876324BE383100BB3120 /* LoginViewController.swift */,
 				C5B6C8BA24BE54EC00990608 /* LocationsTableViewController.swift */,
