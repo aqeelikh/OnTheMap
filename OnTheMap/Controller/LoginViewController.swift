@@ -16,28 +16,56 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     
     
-        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
         
-    //MARK:- Notify the user if the login fails
+    @IBAction func signUpButton(_ sender: Any) {
+        
+        let app = UIApplication.shared
+        let url = URL(string: "https://auth.udacity.com/sign-up?next=https://classroom.udacity.com/authenticated")!
+        if app.canOpenURL(url) {
+            app.open(url)
+            }
+        }
 
-    
     //MARK:- Allow the user to login
-    
     @IBAction func loginButton(_ sender: Any) {
-        APIClient.login(username: self.emailTextField.text ?? "No" , password: self.passwordTextField.text ?? "no", completion: self.handlerLoginResonse(success:error:))
+        APIClient.login(username: self.emailTextField.text ?? "No" , password: self.passwordTextField.text ?? "no", completion: self.handlerLoginResonse(success:error:statuscode:))
     }
             
-    func handlerLoginResonse(success:Bool,error:Error?) -> Void{
-        print(success)
-        if success {
+    
+    func handlerLoginResonse(success:Bool,error:Error?,statuscode:Int) -> Void{
+        
+        switch statuscode {
+        case 200:
             DispatchQueue.main.sync {
                 self.performSegue(withIdentifier: "showMap", sender: nil)
             }
+        case 400 :
+            showAlert(message: "Wrong credentials. try again")
+        case 401 :
+            showAlert(message: "Unauthenticated Access")
+        case 404:
+            showAlert(message: "Not Found")
+        case 500:
+            showAlert(message: "Internal Server Error")
+        default:
+            showAlert(message: "Error, Try Again later")
         }
     }
+    
+    //MARK:- Notify the user if the login fails
+    func showAlert(message:String){
+        DispatchQueue.main.sync {
+        let alertController = UIAlertController(title: "On The Map", message: message, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
+        self.present(alertController, animated: true, completion: nil)
+            }
+        }
 }
 

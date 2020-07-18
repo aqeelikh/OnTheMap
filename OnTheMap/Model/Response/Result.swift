@@ -10,17 +10,25 @@ import Foundation
 
 // MARK: - Result
 struct Result: Codable, Equatable{
-    let firstName, lastName: String
-    let longitude, latitude: Double
-    let mapString: String
-    let mediaURL: String
-    let uniqueKey, objectID, createdAt, updatedAt: String
+    var firstName, lastName: String
+    var longitude, latitude: Double
+    var mapString: String
+    var mediaURL: String
+    var uniqueKey, objectID, createdAt, updatedAt: String
 
     enum CodingKeys: String, CodingKey {
         case firstName, lastName, longitude, latitude, mapString, mediaURL, uniqueKey
         case objectID = "objectId"
         case createdAt, updatedAt
     }
+    
+//    
+//    init(fn:String,ln:String,longitude:Double, latitude:Double, mapString:String,mediaURL:String, uniqueKey:String,
+//         objectID:String,createdAt:String,updatedAt:String) {
+//        
+//        self.firstName =fn
+//        self.lastName = 
+//    }
     
     
     

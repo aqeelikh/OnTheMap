@@ -14,5 +14,4 @@ struct StudentLocation: Codable {
 }
 
 
-
 // MARK:- Init method that accepts a dictionary as an argument, or the struct conforms to the Codable protocol.

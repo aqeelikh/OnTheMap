@@ -11,38 +11,29 @@ import UIKit
 class LocationsTableViewController: UIViewController {
 
     let CellId = "LocationCell"
-    var studentLocations = [Result]()
+    
+    var studentLocations: [Result] = []
+    
     
     @IBOutlet weak var tableView: UITableView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         APIClient.getStudentLocationData() { result, error in
             DispatchQueue.main.async {
                 self.studentLocations =  result
                 self.tableView.reloadData()
             }
         }
-        
     }
-
     
-    // MARK:- Inform the user if the download fails
-    
-    
-    // MARK:- When the pins in the map are tapped, display the relevant information
-    
-    
-    // MARK:- When pin annotation is tapped, the link opened in Safar
-    
-    
-
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
 }
-
 
 extension LocationsTableViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -67,8 +58,43 @@ extension LocationsTableViewController: UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showDetail", sender: nil)
+        
         tableView.deselectRow(at: indexPath, animated: true)
+        let app = UIApplication.shared
+        let url = URL(string: self.studentLocations[(indexPath as NSIndexPath).row].mediaURL)!
+        
+        if app.canOpenURL(url) {
+            app.open(url)
+            }
+        }
+    
+    func handleSessionDeletion(succuss:Bool,error:Error?){
+          if succuss {
+              DispatchQueue.main.sync {
+                  self.dismiss(animated: true, completion: nil)
+              }
+          }
+      }
+    
+    @IBAction func LogoutButton(_ sender: Any) {
+        APIClient.deleteSession(completion: handleSessionDeletion(succuss:error:))
+    }
+    
+     @IBAction func addNewLocation(_ sender: Any) {
+         
+         let navController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNavigationController") as! UINavigationController
+         
+         present(navController, animated: true, completion: nil)
+     }
+    
+    func setupUI() {
+        let plusButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.addNewLocation(_:)))
+        let logoutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(self.LogoutButton(_:)))
+        
+        navigationItem.rightBarButtonItems = [plusButton]
+        navigationItem.leftBarButtonItem = logoutButton
+    }
+    
     }
 
-}
+
